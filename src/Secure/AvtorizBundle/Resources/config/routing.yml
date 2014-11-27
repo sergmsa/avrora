@@ -1,0 +1,4 @@
+secured:
+    resource: "@SecureAvtorizBundle/Controller/SecuredController.php"
+    type:     annotation
+

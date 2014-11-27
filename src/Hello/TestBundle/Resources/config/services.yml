@@ -1,0 +1,7 @@
+parameters:
+#    hello_test.example.class: Hello\TestBundle\Example
+
+services:
+#    hello_test.example:
+#        class: %hello_test.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

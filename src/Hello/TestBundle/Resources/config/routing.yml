@@ -1,0 +1,21 @@
+hello_test_homepage:
+    pattern:  /{name}
+    defaults: { _controller: HelloTestBundle:Default:index, name:'Незнакомец' }
+
+
+#GET /api/film/<название фильма>/schedule
+api_cinema_schedule_film:
+    pattern:  /api/film/schedule/{name_film}
+    defaults: { _controller: HelloTestBundle:Api:nameFilm, name_film:'' }
+
+ #GET /api/cinema/<название кинотеатра>/schedule[?hall=номер зала]
+api_cinema_schedule_hall:
+    pattern:  /api/cinema/schedule/{name_cinema}/{hall}
+    defaults: { _controller: HelloTestBundle:Api:schedule, name_cinema:'', hall:'' }
+    
+#GET /api/session/<id сеанса>/places
+api_cinema_session_places:
+    pattern:  /api/session/places/{id_show}
+    defaults: { _controller: HelloTestBundle:Api:places, id_show:'' }
+
+    

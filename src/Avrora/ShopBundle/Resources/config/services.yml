@@ -1,0 +1,7 @@
+parameters:
+#    avrora_shop.example.class: Avrora\ShopBundle\Example
+
+services:
+#    avrora_shop.example:
+#        class: %avrora_shop.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

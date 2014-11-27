@@ -1,0 +1,179 @@
+{% extends 'AvroraShopBundle::layout.html.twig' %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block auth %}
+{% endblock %}
+
+{% block body %}
+<style>
+
+</style>
+<script>
+object={ 
+  func: function(){
+    $.ajax({
+    cache: false,
+    url: '/shop/detail/{{ id }}/progressdownload?downloadid='+$(".progress").attr('id')
+    ,beforeSend: function(xhr) {
+    },success: function(msg){
+      $(".progress .progress-bar").attr('aria-valuenow',msg);
+      $(".progress .progress-bar").css('width',msg+'%');
+      $(".progress .progress-bar").html(msg+'%');
+      if(msg==100){
+        clearInterval(window.intervalid);
+        $(".progress").hide();
+        $(".run").show();
+      }
+    }
+    });
+  }
+};
+
+objectrun={ 
+  func: function(){
+    $.ajax({
+    cache: false,
+    url: '/shop/detail/{{ id }}/progressrun?downloadid='+$(".progress").attr('id')
+    ,beforeSend: function(xhr) {
+    },success: function(msg){
+      if(msg==2){
+        clearInterval(window.intervalid2);
+        $(".inwork").hide();
+        $(".run").show();
+      }
+    }
+    });
+  }
+};
+
+
+
+
+$(document).ready(function(){
+  $(".pay").click(function(event){
+    $(this).hide();
+    $(".download",$(this).parent()).show();
+  });
+  
+  $(".download").click(function(event){
+    var th=this;
+    
+    $.ajax({
+      cache: false,
+      dataType: "json",
+      url: '/shop/detail/{{ id }}/download'
+      ,beforeSend: function(xhr) {
+      },success: function(msg){
+        if(msg.status!="ok"){
+          alert(msg.error);
+          return false;
+        }
+        $(".progress").attr('id',msg.id);
+        $(th).hide();
+        $(".progress").show();
+        window.intervalid=setInterval( function() { object.func.call(object) } , 2000);
+
+      }
+    });
+    
+  });
+  
+  $(".run").click(function(event){
+    var th=this;
+    
+    $.ajax({
+      cache: false,
+      dataType: "json",
+      url: '/shop/detail/{{ id }}/run'
+      ,beforeSend: function(xhr) {
+      },success: function(msg){
+        if(msg.status!="ok"){
+          alert(msg.error);
+          return false;
+        }
+        $(".progress").attr('id',msg.id);
+        $(th).hide();
+        $(".inwork").show();
+        window.intervalid2=setInterval( function() { objectrun.func.call(objectrun) } , 2000);
+      }
+    });
+    
+  });
+  
+  $(".inwork").click(function(event){
+    var th=this;
+    
+    $.ajax({
+      cache: false,
+      dataType: "json",
+      url: '/shop/detail/{{ id }}/stop?downloadid='+$(".progress").attr('id')
+      ,beforeSend: function(xhr) {
+      },success: function(msg){
+        clearInterval(window.intervalid2);
+        if(msg.status!="ok"){
+          alert(msg.error);
+          return false;
+        }
+        $(".progress").attr('id',msg.id);
+        $(th).hide();
+        $(".run",$(this).parent()).show();
+        window.intervalid2=setInterval( function() { objectrun.func.call(objectrun) } , 2000);
+      }
+    });
+    
+  });
+  
+  
+});
+</script>
+
+<div class="row">
+  <div class="col-xs-3 col-sm-3 col-md-3">
+    
+    <div class="thumbnail">
+      <img width="300" height="" class="attachment-project-thumb" src="/games/{{ id }}.jpg">
+      <div class="caption">
+        <h3>{{ game.name }}</h3>
+        <p><h4><span class="label label-success"><span class="glyphicon glyphicon-shopping-cart"></span> &nbsp;&nbsp;{{ game.price }}$</span></h4></p>
+        <p>
+          <button class="btn btn-primary pay">Купить</button>
+          <button class="btn btn-warning download" style="display:none;">Скачать</button>
+          <button class="btn btn-success run" style="display:none;">Запустить</button>
+          <button class="btn btn-danger inwork" style="display:none;">Остановить</button>
+          
+          <div class="progress" style="display:none;">
+            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+              0%
+            </div>
+          </div>
+          
+        </p>
+      </div>
+    </div>
+    
+  </div>
+  <div class="col-xs-9 col-sm-9 col-md-9">
+    <p>
+    <a href="{{ url('avrora_shop_homepage') }}" class="btn btn-primary">&lt; Вернуться в магазин</a>
+    </p>
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <h3 class="panel-title">Описание</h3>
+      </div>
+      <div class="panel-body">
+        
+      </div>
+    </div>
+    
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <h3 class="panel-title">Системные требования</h3>
+      </div>
+      <div class="panel-body">
+        
+      </div>
+    </div>
+    
+  </div>
+</div>
+{% endblock %}

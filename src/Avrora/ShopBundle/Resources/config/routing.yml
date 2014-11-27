@@ -1,0 +1,24 @@
+avrora_shop_homepage:
+    pattern:  /shop
+    defaults: { _controller: AvroraShopBundle:Default:index }
+
+avrora_shop_detail:
+    pattern:  /shop/detail/{id}
+    defaults: { _controller: AvroraShopBundle:Detail:index }
+    
+avrora_shop_detail_download:
+    pattern:  /shop/detail/{id}/download
+    defaults: { _controller: AvroraShopBundle:Detail:download }
+avrora_shop_detail_progressdownload:
+    pattern:  /shop/detail/{id}/progressdownload
+    defaults: { _controller: AvroraShopBundle:Detail:progressdownload }
+
+avrora_shop_detail_run:
+    pattern:  /shop/detail/{id}/run
+    defaults: { _controller: AvroraShopBundle:Detail:run }
+avrora_shop_detail_progressrun:
+    pattern:  /shop/detail/{id}/progressrun
+    defaults: { _controller: AvroraShopBundle:Detail:progressrun }
+avrora_shop_detail_stop:
+    pattern:  /shop/detail/{id}/stop
+    defaults: { _controller: AvroraShopBundle:Detail:stop }

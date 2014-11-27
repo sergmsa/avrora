@@ -1,0 +1,7 @@
+user_post_directory:
+    pattern:  /mailer/dir/{activ_mail}
+    defaults: { _controller: UserPostBundle:Default:createdir, activ_mail: "noname" }
+
+user_post_homepage:
+    pattern:  /mailer/{activ_mail}
+    defaults: { _controller: UserPostBundle:Default:index, activ_mail: "noname" }

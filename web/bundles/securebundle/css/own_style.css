@@ -1,0 +1,22 @@
+/*!
+ * Bootstrap v3.0.1 
+ * 
+ * 
+ *собственные стили для кастомизации
+ * 
+ */
+ 
+/*отступ сверху у данных в правом поле*/
+.mail_table {
+margin-top:  20px;
+}
+
+.wysihtml5-sandbox {margin: 0 0 20px 0;}
+.hiddenUserInfo { display: none; }
+
+#exit { padding-left: 30px; background: url(http://localhost/Symfony/web/bundles/securebundle/img/gg_ignored.png) 5px 5px no-repeat; }
+
+.fio { max-width: 200px; overflow: hidden; white-space: nowrap}
+
+
+

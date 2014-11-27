@@ -1,0 +1,12 @@
+<form action="{{ path('admin_adm_clients') }}" method="post" {{ form_enctype(FORM) }} id="create_article_form" novalidate>
+<div class="col-md-12 column">
+<div class="input-group">
+    {{ form_errors( FORM.company ) }}
+  <span class="input-group-addon">Заголовок</span>
+
+  {{ form_widget( FORM.company,  { 'attr': {'class': 'form-control form-caption-citata'} } ) }}
+  <span class="input-group-addon" id="citata-caption"></span>
+</div>
+</div>
+
+</form>

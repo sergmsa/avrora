@@ -1,0 +1,187 @@
+{% extends 'AdminAdmBundle::layout.html.twig' %}
+{% block title %}{{ parent() }} {{ title }}{% endblock %}
+
+{% block body %}
+
+<style>
+.imgloader{
+  background:url(/img/ajax-loader.gif) no-repeat;
+  background-size: 100% 22px;
+  width:87px;
+  height:22px;
+  display:none;
+}
+
+</style>
+<script>
+  $(document).ready(function(){
+    
+    $("[name=client_id],[name=pass],[name=dateinstall]").keypress(function(){
+      console.log(event.which);
+      if(event.which==13) {
+        return false;
+      }
+      
+    });
+
+    
+    $("[name=client_id]",$("table tr").slice(1,-1)).click(function(){
+      prevdata=$(this).val();
+    }).change(function(){
+      if(prevdata!=$(this).val() && !confirm('Сохранить изменения?')){
+        $(this).val(prevdata);
+      }else{
+        $.ajax({
+        cache: false,
+        dataType: "json",
+        url: '/adm/attractions/update/'+this.id+'?param='+$(this).attr('name')+'&value='+encodeURIComponent(this.value)
+        ,beforeSend: function(xhr) {
+          //$("#loading_bar").css("display","block");
+        },success: function(msg){
+          //$("#loading_bar").css("display","none");
+          if(msg.status!="ok"){
+            alert(msg.error);
+            return false;
+          }
+        }
+        });
+      }
+    });
+    
+    
+    $("[name=pass],[name=dateinstall]",$("table tr").slice(1,-1)).click(function(){
+      prevdata=$(this).val();
+    }).blur(function(){
+      if(prevdata!=$(this).val()){
+        if(confirm('Сохранить изменения?')){
+          $.ajax({
+          cache: false,
+          dataType: "json",
+          url: '/adm/attractions/update/'+this.id+'?param='+$(this).attr('name')+'&value='+encodeURIComponent(this.value)
+          ,beforeSend: function(xhr) {
+            //$("#loading_bar").css("display","block");
+          },success: function(msg){
+            //$("#loading_bar").css("display","none");
+            if(msg.status!="ok"){
+              alert(msg.error);
+              return false;
+            }
+          }
+          });
+        }else{
+          $(this).val(prevdata);
+        }
+      }
+    });
+    
+    $("table").on( "click", "[name=delete]", function(){
+      if(!confirm('Удалить запись?')) return false;
+      $.ajax({
+      cache: false,
+      dataType: "json",
+      url: '/adm/attractions/delete/'+this.id
+      ,beforeSend: function(xhr) {
+        $("[name=addnew]").hide();
+        $(".addnew + .imgloader").show();
+      },success: function(msg){
+        $(".addnew + .imgloader").hide();
+        $("[name=addnew]").show();
+        if(msg.status!="ok"){
+          alert(msg.error);
+          return false;
+        }
+      }
+      });
+      
+      $(this).closest('tr',$(this)).hide(1000);
+      return false;
+    });
+    
+    $("[name=addnew]").click(function(){
+      $.ajax({
+      type: "post",
+      cache: false,
+      dataType: "json",
+      //url: '/adm/attractions/create?'+'client_id='+encodeURIComponent($(".newclient_id").val())+'&pass='+encodeURIComponent($(".newpass").val())+'&dateinstall='+encodeURIComponent($(".newdateinstall").val())
+      url: '/adm/attractions/create',
+      data: {client_id:$(".newclient_id").val(),pass:$(".newpass").val(),dateinstall:$(".newdateinstall").val()}
+      ,beforeSend: function(xhr) {
+        $("[name=addnew]").hide();
+        $(".addnew + .imgloader").show();
+      },success: function(msg){
+        $(".addnew + .imgloader").hide();
+        $("[name=addnew]").show();
+        if(msg.status!="ok"){
+          alert(msg.error);
+          return false;
+        }
+        //$("table tbody:first").append('<tr>  <td>'+msg.id+'</td>  <td><input type="text" name="client_id" id="'+msg.id+'" value="'+$(".newclient_id").val()+'" class="form-control" /></td>  <td><input type="text" name="pass" id="'+msg.id+'" value="'+$(".newpass").val()+'" class="form-control" /></td>  <td><input type="text" name="gpsn" id="'+msg.id+'" value="'+$(".newgpsn").val()+'" class="form-control" /></td>  <td><input type="text" name="gpse" id="'+msg.id+'" value="'+$(".newgpse").val()+'" class="form-control" /></td>  <td><input type="date" name="dateinstall" id="'+msg.id+'" value="'+$(".newdateinstall").val()+'" class="form-control" /></td>  <td><button type="button" name="delete" id="'+msg.id+'" class="btn">удалить</button></td></tr>');
+        $("table tbody:first").append(msg.newline);
+        $(".addnewrec input").val("");
+        $(".newclient_id option").eq(0).prop('selected',true)
+      }
+      });
+      
+    });
+    
+    
+});
+</script>
+
+<div class="row">
+<table class="table table-striped table-bordered table-hover table-condensed">
+<thead>
+  <tr>
+    <th>id</th>
+    <th>Клиент</th>
+    <th>Пароль</th>
+    <th>Широта</th>
+    <th>Долгота</th>
+    <th>Дата установки</th>
+    <th>Действие</th>
+  </tr>
+</thead>
+<tbody>
+{% for i in data %}
+<tr>
+  <td>{{ i.id }}</td>
+  <td>
+  <select id="{{ i.id }}" class="form-control" name="client_id">
+  {% for ii in clients %}
+    {% if i.client_id==ii.id %}
+      <option value='{{ ii.id }}' selected>{{ ii.company }}</option>
+    {% else %}
+      <option value='{{ ii.id }}'>{{ ii.company }}</option>
+    {% endif %}
+  {% endfor %}
+  </select>
+  </td>
+  <td><input type="password" name="pass" id="{{ i.id }}" value="" class="form-control" placeholder="новый пароль" /></td>
+  <td>{{ i.gpsn }}</td>
+  <td>{{ i.gpse }}</td>
+  <td><input type="date" name="dateinstall" id="{{ i.id }}" value="{{ i.dateinstall }}" class="form-control" /></td>
+  <td><button type="button" name="delete" id="{{ i.id }}" class="btn">удалить</button><div class="imgloader"></div></td>
+</tr>
+{% endfor %}
+</tbody>
+<tbody>
+<tr class="addnewrec">
+  <td></td>
+  <td>
+  <select class="form-control newclient_id" name="client_id">
+  {% for ii in clients %}
+    <option value='{{ ii.id }}'>{{ ii.company }}</option>
+  {% endfor %}
+  </select>
+  </td>
+  <td><input type="text" name="pass" class="form-control newpass" placeholder="пароль" /></td>
+  <td></td>
+  <td></td>
+  <td><input type="date" name="dateintall" class="form-control newdateinstall" placeholder="дата установки" /></td>
+  <td><button type="button" name="addnew" class="btn addnew">Добавить</button><div class="imgloader"></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+{% endblock %}

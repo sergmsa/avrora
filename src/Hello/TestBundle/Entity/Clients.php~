@@ -1,0 +1,74 @@
+<?php
+
+namespace Hello\TestBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Clients
+ *
+ * @ORM\Table(name="clients")
+ * @ORM\Entity
+ */
+class Clients
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="company", type="string", length=64, nullable=false)
+     */
+    private $company;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="fname", type="string", length=64, nullable=false)
+     */
+    private $fname;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="sname", type="string", length=64, nullable=false)
+     */
+    private $sname;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pname", type="string", length=64, nullable=false)
+     */
+    private $pname;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="birthday", type="date", nullable=false)
+     */
+    private $birthday;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string", length=64, nullable=false)
+     */
+    private $email;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="phone", type="string", length=20, nullable=false)
+     */
+    private $phone;
+
+
+}

@@ -1,0 +1,722 @@
+{% extends '::layout.html.twig' %}
+
+   {% block user_add %}
+	
+        <link href="{{ asset('css/simpletree.css') }}" rel="stylesheet">
+	<link href="{{ asset('bundles/securebundle/css/own_style.css') }}" rel="stylesheet">
+    {% endblock %}
+
+  {%block own_script %}
+	<script type="text/javascript" src="{{ asset('bundles/securebundle/js/own_script.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/simpletreemenu.js') }}"></script>
+  {% endblock %}
+
+{% block wysihtml5 %}
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/securebundle/src/bootstrap-wysihtml5.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/securebundle/src/bootstrap3-wysiwyg5-color.css') }}" />
+    <script src="{{ asset('bundles/securebundle/lib/js/wysihtml5-0.3.0.js') }}"></script>
+    <script src="{{ asset('bundles/securebundle/src/bootstrap3-wysihtml5.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<nav class="navbar navbar-default navbar-inverse" role="navigation">
+				<div class="navbar-header">
+					 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+					 <span class="sr-only">Toggle navigation</span>
+					 <span class="icon-bar"></span><span class="icon-bar"></span>
+					 <span class="icon-bar"></span></button> 
+                                    <a  class="navbar-brand fio" href="{{ path('user_post_homepage') }}/{{ USER_INFO.ACTIVE_MAIL }}">{{ USER_INFO.FIO }}</a>
+				</div>
+				
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+					    <li class="active">
+							<a href="{{ path('user_post_homepage') }}/{{ USER_INFO.ACTIVE_MAIL }}">ПОЧТА</a>
+						</li>
+						<li>
+							<a href="{{ path('user_post_directory') }}/{{ USER_INFO.ACTIVE_MAIL }}">ФАЙЛЫ</a>
+						</li>
+						<li>
+							<a href="index_2_3.html">ПОЛЬЗОВАТЕЛИ</a>
+						</li>
+	
+						<li class="dropdown">
+							 <a href="#" class="dropdown-toggle" data-toggle="dropdown">ВЫХОД<strong class="caret"></strong></a>
+							<ul class="dropdown-menu">
+								<li>
+									<a href="{{ path('_logout') }}" id="exit">Подтвердите свой выход из системы.</a>
+								</li>
+
+							</ul>
+						</li>
+					
+					</ul>
+					<!--
+					<form class="navbar-form navbar-left" role="search">
+						<div class="form-group">
+							<input type="text" class="form-control">
+						</div> <button type="submit" class="btn btn-default">Submit</button>
+					</form> 
+          -->
+					<ul class="nav navbar-nav navbar-right"> 
+              
+          <li>
+              <a href="#" data-target="#sendMail"  data-toggle="modal">Новое письмо</a>
+						</li>
+          
+						<li>                  
+							<a href="/">Непрочитанные<span class="badge pull-right"> 42</span></a>
+						</li> 
+              
+						<li class="dropdown">
+							 <a href="{{ path('user_post_homepage') }}/{{ USER_INFO.ACTIVE_MAIL }}" class="dropdown-toggle" data-toggle="dropdown">{{ USER_INFO.ACTIVE_MAIL }}<strong class="caret"></strong></a>
+							<ul class="dropdown-menu">
+                                                           
+                                                            {% for MAIL in USER_INFO.USER_MAIL %}
+                                                                <li>
+									<a href="{{ path('user_post_homepage') }}/{{ MAIL }}">{{ MAIL }}</a>
+								</li>
+                                                            {% endfor %}
+                                                            <li class="divider"></li>
+                                                            <li>
+									<a href="{{ path('user_post_homepage') }}/{{ USER_INFO.MAIN_MAIL  }}">{{ USER_INFO.MAIN_MAIL }}</a>
+							    </li>
+                        				</ul>
+						</li>
+					</ul>
+		
+				</div>
+				
+			</nav>
+			
+			
+		</div>
+	</div>
+	
+	
+	<div class="row clearfix">
+            
+<div class="col-md-3 column"> 
+    
+<!-- Начало дерева директорий -->
+  {% block directory %}
+         {{ render ( controller( "UserPostBundle:Directory:getDirectoryTree" , {'user_id': USER_INFO.USER_ID } )) }}	
+  {% endblock %}
+  
+</div><!--End left columm -->
+
+
+
+<div class="col-md-9 column">  
+    
+{% block main_content %}
+    
+<ul class="nav nav-pills nav-justified">
+  <li class="active"><a href="#tab_a" data-toggle="tab"><span class="badge pull-right">42</span>Непрочитанные</a></li>
+  <li><a href="#tab_b" data-toggle="tab"><span class="badge pull-right">42</span>Отправленные</a></li>
+  <li><a href="#tab_c" data-toggle="tab">Входящие</a></li>
+  <li><a href="#tab_d" data-toggle="tab">Исходящие</a></li>
+  <li><a href="#tab_e" data-toggle="tab">Черновики</a></li>
+</ul>
+<div class="tab-content">
+        <div class="tab-pane active" id="tab_a">
+            
+			
+			 <table class="table table-bordered mail_table table-hover">
+				<thead>
+					<tr>
+						<th>
+							Дата
+						</th>
+						<th>
+							Письмо
+						</th>
+
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+				  
+						<td>
+<!-- Small button group -->
+<div class="btn-group">
+  <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+    2014-04-04 <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+          <li><a href="#readMail"  data-toggle="modal">Прочитать</a></li>
+          <li><a href="#sendMail"  data-toggle="modal">Отправить</a></li>
+          <li><a href="#resendMail"  data-toggle="modal">Переслать</a></li>
+          <li class="divider"></li>
+          <li><a href="#deleteFile"  data-toggle="modal">Удалить</a></li>
+        </ul>
+</div><!-- end Small button group -->
+						</td>
+						<td>
+							TB - Monthly
+				
+							Default
+						</td>
+					</tr>
+					<tr class="active">
+						<td>
+						<!-- Small button group -->
+<div class="btn-group">
+  <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+    2014-04-04 <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+          <li><a href="#">Прочитать</a></li>
+          <li><a href="#">Отправить</a></li>
+          <li><a href="#">Переслать</a></li>
+          <li class="divider"></li>
+          <li><a href="#">Удалить</a></li>
+        </ul>
+</div><!-- end Small button group -->
+						</td>
+						<td>
+							TB - Monthly
+
+							Approved
+						</td>
+					</tr>
+					<tr class="success">
+						<td>
+<!-- Small button group -->
+<div class="btn-group">
+  <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+    2014-04-04 <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+          <li><a href="#">Прочитать</a></li>
+          <li><a href="#">Отправить</a></li>
+          <li><a href="#">Переслать</a></li>
+          <li class="divider"></li>
+          <li><a href="#">Удалить</a></li>
+        </ul>
+</div><!-- end Small button group -->
+						</td>
+						<td>
+							TB - Monthly
+							Declined
+						</td>
+					</tr>
+					<tr class="warning">
+						<td>
+<!-- Small button group -->
+<div class="btn-group">
+  <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+    2014-04-04 <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+          <li><a href="#">Прочитать</a></li>
+          <li><a href="#">Отправить</a></li>
+          <li><a href="#">Переслать</a></li>
+          <li class="divider"></li>
+          <li><a href="#">Удалить</a></li>
+        </ul>
+</div><!-- end Small button group -->
+						</td>
+						<td>
+							TB - Monthly Pending TB - Monthly PendingTB - Monthly PendingTB - Monthly PendingTB - Monthly PendingTB - Monthly PendingTB - Monthly Pending
+						</td>
+					</tr>
+					<tr class="danger">
+						<td>
+		<!-- Small button group -->
+<div class="btn-group">
+  <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+    2014-04-04 <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+          <li><a href="#">Прочитать</a></li>
+          <li><a href="#">Отправить</a></li>
+          <li><a href="#">Переслать</a></li>
+          <li class="divider"></li>
+          <li><a href="#">Удалить</a></li>
+        </ul>
+</div><!-- end Small button group -->
+						</td>
+						<td>
+							TB - Monthly
+
+
+							Call in to confirm
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
+			
+			<ul class="pagination">
+			   <li class="disabled"><a href="#">&laquo;</a></li>
+  <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+			  <li><a href="#">2</a></li>
+			  <li><a href="#">3</a></li>
+			  <li><a href="#">4</a></li>
+			  <li><a href="#">5</a></li>
+			  <li><a href="#">&raquo;</a></li>
+			</ul>
+			
+        </div><!-- /id="tab_a" -->
+		
+		
+   <div class="tab-pane" id="tab_b">
+ 
+     <table class="table table-bordered mail_table table-hover">
+				<thead>
+					<tr>
+						<th>
+							Дата
+						</th>
+						<th>
+							Письмо
+						</th>
+
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+				  
+						<td>
+<!-- Small button group -->
+<div class="btn-group">
+  <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+    2014-04-04 <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+          <li><a href="#readMail"  data-toggle="modal">Прочитать</a></li>
+          <li><a href="#sendMail"  data-toggle="modal">Отправить</a></li>
+          <li><a href="#resendMail"  data-toggle="modal">Переслать</a></li>
+          <li class="divider"></li>
+          <li><a href="#deleteFile"  data-toggle="modal">Удалить</a></li>
+        </ul>
+</div><!-- end Small button group -->
+						</td>
+						<td>
+							TB - Monthly
+				
+							Default
+						</td>
+					</tr>
+					<tr class="active">
+						<td>
+						<!-- Small button group -->
+<div class="btn-group">
+  <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+    2014-04-04 <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+          <li><a href="#">Прочитать</a></li>
+          <li><a href="#">Отправить</a></li>
+          <li><a href="#">Переслать</a></li>
+          <li class="divider"></li>
+          <li><a href="#">Удалить</a></li>
+        </ul>
+</div><!-- end Small button group -->
+						</td>
+						<td>
+							TB - Monthly
+
+							Approved
+						</td>
+					</tr>
+					<tr class="success">
+						<td>
+<!-- Small button group -->
+<div class="btn-group">
+  <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+    2014-04-04 <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+          <li><a href="#">Прочитать</a></li>
+          <li><a href="#">Отправить</a></li>
+          <li><a href="#">Переслать</a></li>
+          <li class="divider"></li>
+          <li><a href="#">Удалить</a></li>
+        </ul>
+</div><!-- end Small button group -->
+						</td>
+						<td>
+							TB - Monthly
+							Declined
+						</td>
+					</tr>
+					<tr class="warning">
+						<td>
+<!-- Small button group -->
+<div class="btn-group">
+  <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+    2014-04-04 <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+          <li><a href="#">Прочитать</a></li>
+          <li><a href="#">Отправить</a></li>
+          <li><a href="#">Переслать</a></li>
+          <li class="divider"></li>
+          <li><a href="#">Удалить</a></li>
+        </ul>
+</div><!-- end Small button group -->
+						</td>
+						<td>
+							TB - Monthly Pending TB - Monthly PendingTB - Monthly PendingTB - Monthly PendingTB - Monthly PendingTB - Monthly PendingTB - Monthly Pending
+						</td>
+					</tr>
+					<tr class="danger">
+						<td>
+		<!-- Small button group -->
+<div class="btn-group">
+  <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+    2014-04-04 <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+          <li><a href="#">Прочитать</a></li>
+          <li><a href="#">Отправить</a></li>
+          <li><a href="#">Переслать</a></li>
+          <li class="divider"></li>
+          <li><a href="#">Удалить</a></li>
+        </ul>
+</div><!-- end Small button group -->
+						</td>
+						<td>
+							TB - Monthly
+
+
+							Call in to confirm
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
+			
+			<ul class="pagination">
+			   <li class="disabled"><a href="#">&laquo;</a></li>
+  <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+			  <li><a href="#">2</a></li>
+			  <li><a href="#">3</a></li>
+			  <li><a href="#">4</a></li>
+			  <li><a href="#">5</a></li>
+			  <li><a href="#">&raquo;</a></li>
+			</ul>
+
+        </div><!-- /id="tab_b" -->
+		
+		
+        <div class="tab-pane" id="tab_c">
+            <table class="table table-bordered mail_table table-hover">
+				<thead>
+					<tr>
+						<th>
+							Дата
+						</th>
+						<th>
+							Письмо
+						</th>
+
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+				  
+						<td>
+<!-- Small button group -->
+<div class="btn-group">
+  <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+    2014-04-04 <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+          <li><a href="#readMail"  data-toggle="modal">Прочитать</a></li>
+          <li><a href="#sendMail"  data-toggle="modal">Отправить</a></li>
+          <li><a href="#resendMail"  data-toggle="modal">Переслать</a></li>
+          <li class="divider"></li>
+          <li><a href="#deleteFile"  data-toggle="modal">Удалить</a></li>
+        </ul>
+</div><!-- end Small button group -->
+						</td>
+						<td>
+							TB - Monthly
+				
+							Default
+						</td>
+					</tr>
+					<tr class="active">
+						<td>
+						<!-- Small button group -->
+<div class="btn-group">
+  <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+    2014-04-04 <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+          <li><a href="#">Прочитать</a></li>
+          <li><a href="#">Отправить</a></li>
+          <li><a href="#">Переслать</a></li>
+          <li class="divider"></li>
+          <li><a href="#">Удалить</a></li>
+        </ul>
+</div><!-- end Small button group -->
+						</td>
+						<td>
+							TB - Monthly
+
+							Approved
+						</td>
+					</tr>
+					<tr class="success">
+						<td>
+<!-- Small button group -->
+<div class="btn-group">
+  <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+    2014-04-04 <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+          <li><a href="#">Прочитать</a></li>
+          <li><a href="#">Отправить</a></li>
+          <li><a href="#">Переслать</a></li>
+          <li class="divider"></li>
+          <li><a href="#">Удалить</a></li>
+        </ul>
+</div><!-- end Small button group -->
+						</td>
+						<td>
+							TB - Monthly
+							Declined
+						</td>
+					</tr>
+
+
+				</tbody>
+			</table>
+			
+			
+			<ul class="pagination">
+			   <li class="disabled"><a href="#">&laquo;</a></li>
+  <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+			  <li><a href="#">2</a></li>
+			  <li><a href="#">3</a></li>
+			  <li><a href="#">4</a></li>
+			  <li><a href="#">5</a></li>
+			  <li><a href="#">&raquo;</a></li>
+			</ul>
+        </div>
+        <div class="tab-pane" id="tab_d">
+             <h4>Pane D</h4>
+            <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames
+                ac turpis egestas.</p>
+        </div>
+		<div class="tab-pane" id="tab_e">
+             <h4>Черновики</h4>
+            <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames
+                ac turpis egestas.</p>
+        </div>
+</div><!-- tab content -->
+
+{% endblock %}
+
+
+		
+		</div> <!--End Rigth columm -->
+		
+		
+		
+		
+	</div>
+</div>
+  
+  
+<!-- Modal -->
+<div class="modal fade" id="sendMail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Отправить письмо ---  sendMail</h4>
+      </div>
+      <div class="modal-body">
+
+ <form action="upload.php" method="post" enctype="multipart/form-data">
+	<div class="input-group">
+  <span class="input-group-addon">Отправитель @</span>
+  <input type="text" class="form-control" placeholder="{{ USER_INFO.ACTIVE_MAIL }}" disabled="disabled">
+	</div>
+	<br/>	
+	
+	
+<div class="input-group">
+  <span class="input-group-addon">Заголовок</span>
+  <input type="text" class="form-control" placeholder="Письмо лучшему другу">
+	</div>
+<br/>	
+
+<div class="input-group">
+  <span class="input-group-addon">Получатель @</span>
+  <input type="text" class="form-control" placeholder="Мой друг">
+	</div>
+<br/>
+		   
+
+	  <textarea id="some-textarea-send"  style="width: 100%; height: 200px; border-radius: 6px; border: 1px solid #CCCCCC; padding: 10px">
+	  Уважаемый клиент!<br/><br/><br/><br/><br/><br/>
+	  
+	  
+	  
+	  C уважением, ваш менеджер...
+	  
+	  </textarea>
+
+<div>&nbsp;</div>
+
+				<input id="lefile" type="file" style="display:none"/>
+				<input class="path_upload" type="text" style="display:none" value="user165"/>
+				 <div class="row">
+				  <div class="col-lg-12">
+					<div class="input-group">
+					  <input type="text" class="form-control photoCover"/>
+					  <span class="input-group-btn">
+						<button class="btn btn-default" type="button"  onclick="$('input[id=lefile]').click();">ФАЙЛ</button>
+					  </span>
+					</div><!-- /input-group -->
+				  </div><!-- /.col-lg-6 -->
+				</div><!-- /.row -->
+				<br/>
+				<textarea class="form-control" rows="3" placeholder="комментарии к файлу"></textarea>
+				<br/>
+
+		</form>
+
+
+      </div>
+	  <div style="clear: both"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Отменить</button>
+        <button type="button" class="btn btn-primary">Переслать</button>
+		<button type="button" class="btn btn-primary">Сохранить черновик</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal sendMail -->
+
+
+<div class="modal fade" id="readMail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Прочитать письмо  ---  readMail</h4>
+      </div>
+      <div class="modal-body">
+
+
+	<div class="input-group">
+  <span class="input-group-addon">To @</span>
+  <input type="text" class="form-control" placeholder="Адрес получателя почты">
+	</div>
+	<br/>	
+	
+	
+<div class="input-group">
+  <span class="input-group-addon">Заголовок</span>
+  <input type="text" class="form-control" placeholder="Адрес получателя почты">
+	</div>
+<br/>	
+
+<div class="input-group">
+  <span class="input-group-addon">From @</span>
+  <input type="text" class="form-control" placeholder="Адрес отправителя почты">
+	</div>
+<br/>
+		   
+
+	  <textarea id="some-textarea"  style="width: 100%; height: 200px; border-radius: 6px; border: 1px solid #CCCCCC; padding: 10px">
+	  Уважаемый менеджер!<br/>
+	  вам пишет ваш постоянный клиент...<br/>
+	  
+	  </textarea>
+
+<script type="text/javascript">
+    $('#some-textarea').wysihtml5();
+</script>
+
+<div>&nbsp;</div>
+<div class="input-group">
+  <span class="input-group-addon">File</span>
+  <input type="text" class="form-control" id="upFile" value="extFile.doc">
+	</div>
+
+
+      </div>
+	  <div style="clear: both"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Отменить</button>
+        <button type="button" class="btn btn-primary">Отправить</button>
+		<button type="button" class="btn btn-primary">Сохранить черновик</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal readMail -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="resendMail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Переслать письмо ----resendMail</h4>
+      </div>
+      <div class="modal-body">
+        тут редактор стараго письма
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Отменить</button>
+        <button type="button" class="btn btn-primary">Отправить</button>
+		<button type="button" class="btn btn-primary">Сохранить черновик</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="deleteFile" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Удаление файла</h4>
+      </div>
+      <div class="modal-body">
+        Вы подтверждаете удаление файла ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Отменить</button>
+        <button type="button" class="btn btn-primary">Удалить</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<div id="wysihtml5-toolbar-sendMail" style="display: none;">
+  <a data-wysihtml5-command="bold">bold</a>
+  <a data-wysihtml5-command="italic">italic</a>
+  
+  <!-- Some wysihtml5 commands require extra parameters -->
+  <a data-wysihtml5-command="foreColor" data-wysihtml5-command-value="red">red</a>
+  <a data-wysihtml5-command="foreColor" data-wysihtml5-command-value="green">green</a>
+  <a data-wysihtml5-command="foreColor" data-wysihtml5-command-value="blue">blue</a>
+  
+  <!-- Some wysihtml5 commands like 'createLink' require extra paramaters specified by the user (eg. href) -->
+  <a data-wysihtml5-command="createLink">insert link</a>
+  <div data-wysihtml5-dialog="createLink" style="display: none;">
+    <label>
+      Link:
+      <input data-wysihtml5-dialog-field="href" value="http://" class="text">
+    </label>
+    <a data-wysihtml5-dialog-action="save">OK</a> <a data-wysihtml5-dialog-action="cancel">Cancel</a>
+  </div>
+</div>
+  
+{% endblock %}
+

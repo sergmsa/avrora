@@ -1,0 +1,36 @@
+{% extends "::layout.html.twig" %}
+
+{% block title %}Авторизация{% endblock %}
+
+{% block login_form %}
+	<link href="{{ asset('bundles/securebundle/css/form_login.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+		<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-md-4 col-md-offset-4">
+            <h1 class="text-center login-title">Авторизация в проекте ПОЧТА</h1>
+            <div class="account-wall">
+                <img class="profile-img" src="{{ asset('bundles/securebundle/img/mic.png') }}"
+                    alt="">
+					
+					
+				{% if error %}
+   <div class="alert alert-danger">{{ error.message }}</div>
+{% endif %}
+                  
+<form class="form-signin" action="{{ path("_security_check") }}" method="post" id="login">
+                <form class="form-signin"  action="{{ path("_security_check") }}" method="post" id="login">
+                <input type="text" class="form-control" placeholder="ЛОГИН или email" required autofocus name="_username">
+                <input type="password" class="form-control" placeholder="Password" required name="_password">
+                <button class="btn btn-lg btn-primary btn-block" type="submit">
+                    Авторизация</button>
+
+                <a href="#" class="pull-right need-help">Забыли пароль? </a><span class="clearfix"></span>
+                </form>
+            </div>
+           <!-- <a href="#" class="text-center new-account">Create an account </a> -->
+        </div>
+    </div>
+{% endblock %}

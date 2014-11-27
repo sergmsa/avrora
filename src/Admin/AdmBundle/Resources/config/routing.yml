@@ -1,0 +1,70 @@
+admin_adm_homepage:
+    pattern:  /adm
+    defaults: { _controller: AdminAdmBundle:Default:index }
+
+
+admin_adm_clients:
+    pattern:  /adm/clients
+    defaults: { _controller: AdminAdmBundle:Clients:index }
+admin_adm_clients_create:
+    pattern:  /adm/clients/create
+    defaults: { _controller: AdminAdmBundle:Clients:create }
+admin_adm_clients_delete:
+    pattern:  /adm/clients/delete/{id}
+    defaults: { _controller: AdminAdmBundle:Clients:delete }
+admin_adm_clients_update:
+    pattern:  /adm/clients/update/{id}
+    defaults: { _controller: AdminAdmBundle:Clients:update }
+
+
+admin_adm_attractions:
+    pattern:  /adm/attractions
+    defaults: { _controller: AdminAdmBundle:Attractions:index }
+admin_adm_attractions_create:
+    pattern:  /adm/attractions/create
+    defaults: { _controller: AdminAdmBundle:Attractions:create }
+admin_adm_attractions_delete:
+    pattern:  /adm/attractions/delete/{id}
+    defaults: { _controller: AdminAdmBundle:Attractions:delete }
+admin_adm_attractions_update:
+    pattern:  /adm/attractions/update/{id}
+    defaults: { _controller: AdminAdmBundle:Attractions:update }
+
+
+admin_adm_games:
+    pattern:  /adm/games
+    defaults: { _controller: AdminAdmBundle:Games:index }
+admin_adm_games_create:
+    pattern:  /adm/games/create
+    defaults: { _controller: AdminAdmBundle:Games:create }
+admin_adm_games_delete:
+    pattern:  /adm/games/delete/{id}
+    defaults: { _controller: AdminAdmBundle:Games:delete }
+admin_adm_games_update:
+    pattern:  /adm/games/update/{id}
+    defaults: { _controller: AdminAdmBundle:Games:update }
+admin_adm_games_loadimg:
+    pattern:  /adm/games/loadimg/{id}
+    defaults: { _controller: AdminAdmBundle:Games:loadimg }
+
+
+
+
+admin_adm_commands:
+    pattern:  /adm/commands
+    defaults: { _controller: AdminAdmBundle:Commands:index }
+admin_adm_commands_stop:
+    pattern:  /adm/commands/stop/{id}
+    defaults: { _controller: AdminAdmBundle:Commands:stop }
+    
+
+admin_adm_historycommands:
+    pattern:  /adm/historycommands
+    defaults: { _controller: AdminAdmBundle:Default:historycommands }
+
+admin_adm_gamesinstall:
+    pattern:  /adm/gamesinstall
+    defaults: { _controller: AdminAdmBundle:Default:gamesinstall }
+
+
+

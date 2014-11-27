@@ -1,0 +1,7 @@
+parameters:
+#    common_cifra.example.class: Common\CifraBundle\Example
+
+services:
+#    common_cifra.example:
+#        class: %common_cifra.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
